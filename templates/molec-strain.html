@@ -105,12 +105,12 @@
 		.attr("transform", "translate(" + [w/2, h/2] + ")");
 	
 	var spoke_01 = g_front.append("path") .attr("id", "spoke_01")
-		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3");
+		.attr("d", "M "+ r + " 0 h " + r);
 	var spoke_left = g_front.append("path") .attr("id", "spoke_02")
-		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3")
+		.attr("d", "M "+ r + " 0 h " + r)
 		.attr("transform", "rotate(" + (-120) + ")");
 	var spoke_right = g_front.append("path") .attr("id", "spoke_03")
-		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3")
+		.attr("d", "M "+ r + " 0 h " + r)
 		.attr("transform", "rotate(" + (120) + ")");;
 	    
 	var circle_front = g_front.append("circle").attr("id", "circle_front")
