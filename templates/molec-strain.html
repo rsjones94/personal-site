@@ -1,0 +1,203 @@
+{% extends "layout.html" %}
+
+{% block vissetup%}
+
+	<meta charset="utf-8" />
+	<script src="http://d3js.org/d3.v3.min.js"></script>
+
+{% endblock vissetup%}
+
+{% block content %}	
+
+	<article class="media content-section">
+	  <div class="media-body">
+	    <h2><a class="article-title">Interactive Newman Projection</a></h2>
+	    	<p style="text-align: left;">---</p>
+	  </div>
+	</article>
+
+<script>choices = ["H","Me","Pr","F","Cl","Br"]</script>
+
+<form>
+<div>
+	<p>Front Groups</p>
+  <div class="form-row">
+    <div class="col">
+      <select class="form-control", name="fg1">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+    <div class="col">
+      <select class="form-control", name="fg2">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+    <div class="col">
+      <select class="form-control", name="fg3">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<div>
+	<p></p>
+  	<p>Back Groups</p>
+  <div class="form-row">
+    <div class="col">
+      <select class="form-control", name="bg1">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+    <div class="col">
+      <select class="form-control", name="bg2">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+    <div class="col">
+      <select class="form-control", name="bg3">
+      	<option>H</option>
+      	<option>Me</option>
+      	<option>Et</option>
+      	<option>Cl</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+</form>
+
+<script>
+
+	var w = 800,  h = 500 , r = 75, mult = 2.3, backfrac = 4;
+	 
+	var svg = d3.select("html").append("svg")
+		.attr({width: w, height: h})
+		.on("mousemove", follow_mouse)
+		.on("mouseover", update_groups);
+		
+	var report = svg.append("text") .attr("id", "report")
+		.attr({x: 80, y: 80})
+		.text("Dihedral Angle: 0.00°");
+
+	var strain = svg.append("text") .attr("id", "strain")
+		.attr({x: 80, y: 100})
+		.text("Strain: 0 kJ/mol");
+		
+	var g_front = svg.append("g").attr("id", "g_front")
+		.attr("transform", "translate(" + [w/2, h/2] + ")");
+	var g_back = svg.append("g").attr("id", "g_back")
+		.attr("transform", "translate(" + [w/2, h/2] + ")");
+	
+	var spoke_01 = g_front.append("path") .attr("id", "spoke_01")
+		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3");
+	var spoke_left = g_front.append("path") .attr("id", "spoke_02")
+		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3")
+		.attr("transform", "rotate(" + (-120) + ")");
+	var spoke_right = g_front.append("path") .attr("id", "spoke_03")
+		.attr("d", "M "+ r + " 0 h " + r + "l -9 3  2 -3 -2 -3 9 3")
+		.attr("transform", "rotate(" + (120) + ")");;
+	    
+	var circle_front = g_front.append("circle").attr("id", "circle_front")
+		.attr("r", r);
+	var circle_back = g_back.append("circle").attr("id", "circle_back")
+		.attr("r", r/backfrac);
+		
+	var fixed_up = g_back.append("path") .attr("id", "spoke_01")
+		.attr("d", "M 0 0 V " + -r*mult);
+	var fixed_left = g_back.append("path") .attr("id", "spoke_04")
+		.attr("d", "M 0 0 L " + -(r/2*Math.sqrt(3))*mult + " " + (r/2)*mult);
+	var fixed_right = g_back.append("path") .attr("id", "spoke_04")
+		.attr("d", "M 0 0 L " + (r/2*Math.sqrt(3))*mult + " " + (r/2)*mult);
+
+	var front_text = svg.append("g") .attr("id", "chemgroupfront");
+	var front_text_up = front_text.append("text")
+		.attr({x: w/2, y: h/2-r*mult})
+		.text("-")
+		.attr("text-anchor", "middle");
+	var front_text_left = front_text.append("text")
+		.attr({x: w/2-(r*mult/2*Math.sqrt(3)), y: h/2+(r*mult/2)*1.07})
+		.text("-")
+		.attr("text-anchor", "end");
+	var front_text_right = front_text.append("text")
+		.attr({x: w/2+(r*mult/2*Math.sqrt(3)), y: h/2+(r*mult/2)*1.07})
+		.text("-")
+		.attr("text-anchor", "start");
+
+	var back_text = svg.append("g").attr("id", "chemgroupback")
+		.attr("text-anchor", "middle");
+	var back_text_right = back_text.append("text")
+		.attr({x: w/2+r*2, y: h/2*1.02})
+		.text("-")
+		.attr("text-anchor", "start");
+	var back_text_bottom = back_text.append("text")
+		.attr({x: w/2-(r/2*Math.sqrt(3))*1.07, y: h/2+(r*Math.sqrt(3))*1.08})
+		.text("-")
+		.attr("text-anchor", "end");
+	var back_text_top = back_text.append("text")
+		.attr({x: w/2-(r/2*Math.sqrt(3)), y: h/2-(r*Math.sqrt(3))})
+		.text("-")
+		.attr("text-anchor", "end");
+
+	function follow_mouse() {
+		var xy = d3.mouse(circle_front.node());
+		var angle = (180/Math.PI * Math.atan2(xy[1], xy[0]));
+		var dispangle = angle+90
+		if (dispangle < 0) {
+			dispangle += 360
+		}
+		d3.select("#spoke_01").attr("transform", "rotate(" + angle + ")");
+		d3.select("#spoke_02").attr("transform", "rotate(" + (angle-120) + ")");
+		d3.select("#spoke_03").attr("transform", "rotate(" + (angle+120) + ")");
+
+		d3.select("#chemgroupback").attr("transform", "rotate("+(angle)+","+w/2+","+h/2+")");
+
+		d3.select("#report").text("Dihedral Angle: " + dispangle.toFixed(2) + "°");
+		d3.select("#strain").text("Strain: " + angle.toFixed(2) + " kJ/mol");
+	}
+
+	function get_groups() {
+
+		fg1_val = document.getElementsByName("fg1")[0].value
+		fg2_val = document.getElementsByName("fg2")[0].value
+		fg3_val = document.getElementsByName("fg3")[0].value
+
+		bg1_val = document.getElementsByName("bg1")[0].value
+		bg2_val = document.getElementsByName("bg2")[0].value
+		bg3_val = document.getElementsByName("bg3")[0].value
+
+		return [fg1_val, fg2_val, fg3_val, bg1_val, bg2_val, bg3_val]
+
+	}
+
+	function update_groups() {
+
+		//d3.select("#chemgroupfront").attr("transform", "rotate("+(Math.random()*360)+","+w/2+","+h/2+")");
+		groups = get_groups()
+		spots = [front_text_up, front_text_right, front_text_left, back_text_right, back_text_bottom, back_text_top]
+		
+		var arrayLength = spots.length;
+		for (var i = 0; i < arrayLength; i++) {
+		    spots[i].text(groups[i])
+		}
+
+	}
+
+</script>
+
+{% endblock content %}
