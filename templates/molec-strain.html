@@ -12,7 +12,7 @@
 	<article class="media content-section">
 	  <div class="media-body">
 	    <h2><a class="article-title">Interactive Newman Projection</a></h2>
-	    	<p style="text-align: left;">Newman projections can be used to visualize the various conformations of an alkane. This interactive plot can be used to calculate the strain of an alkane you vary the dihedral angle.</p>
+	    	<p style="text-align: left;">Newman projections are used to visualize various conformations of an alkane. This interactive plot can be used to calculate the strain of an alkane as the dihedral angle is varied.</p>
 	  </div>
 	</article>
 
@@ -26,24 +26,18 @@
       <select class="form-control", name="fg1">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
     <div class="col">
       <select class="form-control", name="fg2">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
     <div class="col">
       <select class="form-control", name="fg3">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
   </div>
@@ -57,24 +51,18 @@
       <select class="form-control", name="bg1">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
     <div class="col">
       <select class="form-control", name="bg2">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
     <div class="col">
       <select class="form-control", name="bg3">
       	<option>H</option>
       	<option>Me</option>
-      	<option>Et</option>
-      	<option>Cl</option>
       </select>
     </div>
   </div>
@@ -83,14 +71,16 @@
 </form>
 
 <script>
-
-	var w = 800,  h = 500 , r = 75, mult = 2.3, backfrac = 4;
+	// set up
+	// note: front/back designations are backwards
+	var w = 800,  h = 500 , r = 75, mult = 2.3, backfrac = 3;
 	 
 	var svg = d3.select("html").append("svg")
 		.attr({width: w, height: h})
 		.on("mousemove", follow_mouse)
 		.on("mouseover", update_groups);
-		
+	
+	// text displays
 	var report = svg.append("text") .attr("id", "report")
 		.attr({x: 80, y: 80})
 		.text("Dihedral Angle: 0.00°");
@@ -99,32 +89,38 @@
 		.attr({x: 80, y: 100})
 		.text("Strain: 0 kJ/mol");
 		
+	// groups
 	var g_front = svg.append("g").attr("id", "g_front")
 		.attr("transform", "translate(" + [w/2, h/2] + ")");
 	var g_back = svg.append("g").attr("id", "g_back")
 		.attr("transform", "translate(" + [w/2, h/2] + ")");
-	
-	var spoke_01 = g_front.append("path") .attr("id", "spoke_01")
-		.attr("d", "M "+ r + " 0 h " + r);
-	var spoke_left = g_front.append("path") .attr("id", "spoke_02")
-		.attr("d", "M "+ r + " 0 h " + r)
-		.attr("transform", "rotate(" + (-120) + ")");
-	var spoke_right = g_front.append("path") .attr("id", "spoke_03")
-		.attr("d", "M "+ r + " 0 h " + r)
-		.attr("transform", "rotate(" + (120) + ")");;
 	    
-	var circle_front = g_front.append("circle").attr("id", "circle_front")
-		.attr("r", r);
+
+	// fixed spokes
+	var front_group = g_front.append("g").attr("id", "front_group")
+	var front_spokes = front_group.append("path").attr("id", "front_spokes")
+		.attr("d",
+			  "M 0 0 L " + -(r/2*Math.sqrt(3))*mult + " " + (r/2)*mult +
+			  "M 0 0 L " + (r/2*Math.sqrt(3))*mult + " " + (r/2)*mult);
+	var mark_spoke_front = front_group.append("path") .attr("id", "mark_spoke_front")
+		.attr("d", "M 0 0 V " + -r*mult);
+
+	// rotating spokes
+	var back_group = g_back.append("g").attr("id", "back_group")
+	var back_spokes = back_group.append("path").attr("id", "back_spokes")
+		.attr("d",
+			  "M 0 0 L " + -(r) + " " + -(r*Math.sqrt(3)) +
+			  "M 0 0 L " + -(r) + " " + (r*Math.sqrt(3)));
+	var mark_spoke_back = back_group.append("path") .attr("id", "mark_spoke_back")
+		.attr("d", "M 0,0 H " + r*2);
+
+	// circles
 	var circle_back = g_back.append("circle").attr("id", "circle_back")
 		.attr("r", r/backfrac);
-		
-	var fixed_up = g_back.append("path") .attr("id", "spoke_01")
-		.attr("d", "M 0 0 V " + -r*mult);
-	var fixed_left = g_back.append("path") .attr("id", "spoke_04")
-		.attr("d", "M 0 0 L " + -(r/2*Math.sqrt(3))*mult + " " + (r/2)*mult);
-	var fixed_right = g_back.append("path") .attr("id", "spoke_04")
-		.attr("d", "M 0 0 L " + (r/2*Math.sqrt(3))*mult + " " + (r/2)*mult);
+	var circle_front = g_front.append("circle").attr("id", "circle_front")
+		.attr("r", r);
 
+	// molecular group text
 	var front_text = svg.append("g") .attr("id", "chemgroupfront");
 	var front_text_up = front_text.append("text")
 		.attr({x: w/2, y: h/2-r*mult})
@@ -155,20 +151,18 @@
 		.attr("text-anchor", "end");
 
 	function follow_mouse() {
-		var xy = d3.mouse(circle_front.node());
-		var angle = (180/Math.PI * Math.atan2(xy[1], xy[0]));
-		var dispangle = angle+90
-		if (dispangle < 0) {
-			dispangle += 360
-		}
-		d3.select("#spoke_01").attr("transform", "rotate(" + angle + ")");
-		d3.select("#spoke_02").attr("transform", "rotate(" + (angle-120) + ")");
-		d3.select("#spoke_03").attr("transform", "rotate(" + (angle+120) + ")");
+		var angle = get_angle()
+		var dispangle = get_theta()
+
+		d3.select("#back_group").attr("transform", "rotate(" + angle + ")");
 
 		d3.select("#chemgroupback").attr("transform", "rotate("+(angle)+","+w/2+","+h/2+")");
 
 		d3.select("#report").text("Dihedral Angle: " + dispangle.toFixed(2) + "°");
-		d3.select("#strain").text("Strain: " + angle.toFixed(2) + " kJ/mol");
+
+		strains = calculate_strains()
+		total_strain = strains[0] + strains[1]
+		d3.select("#strain").text("Strain: " + total_strain.toFixed(2) + " kJ/mol");
 	}
 
 	function get_groups() {
@@ -181,7 +175,123 @@
 		bg2_val = document.getElementsByName("bg2")[0].value
 		bg3_val = document.getElementsByName("bg3")[0].value
 
-		return [fg1_val, fg2_val, fg3_val, bg1_val, bg2_val, bg3_val]
+		return [bg1_val, bg2_val, bg3_val, fg1_val, fg2_val, fg3_val]
+
+	}
+
+	function get_angle() {
+		var xy = d3.mouse(circle_front.node())
+		var angle = (180/Math.PI * Math.atan2(xy[1], xy[0]));
+		return angle
+	}
+
+	function get_theta() {
+		var xy = d3.mouse(circle_front.node())
+		var angle = (180/Math.PI * Math.atan2(xy[1], xy[0]));
+		var dispangle = angle+90
+		if (dispangle < 0) {
+			dispangle += 360
+		}
+
+		return dispangle
+	}
+
+	function get_interaction_angles() {
+
+		angle = get_theta()
+
+		a1 = [Math.abs(angle), Math.abs(angle-120), Math.abs(angle-240)]
+	    a2 = [Math.abs(angle-240), Math.abs(angle), Math.abs(angle-120)]
+	    a3 = [Math.abs(angle-120), Math.abs(angle-240), Math.abs(angle)]
+    
+	    angles = [a1,a2, a3]
+	    for (var i = 0; i < angles.length; i++) {
+			    for (var j = 0; j < angles[i].length; j++){
+			    	if (angles[i][j] > 180) {
+	          			angles[i][j] = 360 - angles[i][j]
+	          		}
+			    }
+			}
+
+			return angles
+
+	}
+
+	function get_eclipsing_strengths() {
+
+		angles = get_interaction_angles()
+
+	    for (var i = 0; i < angles.length; i++) {
+			    for (var j = 0; j < angles[i].length; j++){
+			    	if (angles[i][j] > 60) {
+	          			angles[i][j] = 0
+	          		} else {
+	          			angles[i][j] = 1 - (angles[i][j] / 60)
+	          		}
+
+			    }
+			}
+
+		return angles
+	}
+
+	function get_gauche_strengths() {
+
+		angles = get_interaction_angles()
+
+	    for (var i = 0; i < angles.length; i++) {
+			    for (var j = 0; j < angles[i].length; j++){
+			    	if (angles[i][j] > 120) {
+	          			angles[i][j] = 0
+	          		} else {
+	          			if (angles[i][j] > 60) {
+	          				angles[i][j] = 120 - angles[i][j]
+	          			}
+	          			angles[i][j] = angles[i][j] / 60
+	          		}
+
+			    }
+			}
+
+		return angles
+	}
+
+	function calculate_strains() {
+
+		h_eclipsing_vals = {H: 4.0, Me: 6.0}
+		me_eclipsing_vals = {H: 6.0, Me: 11.0}
+		h_gauche_vals = {H: 0.0, Me: 0.0}
+		me_gauche_vals = {H: 0.0, Me: 3.8}
+
+		eclipsing_vals = {H:h_eclipsing_vals, Me:me_eclipsing_vals}
+		gauche_vals = {H:h_gauche_vals, Me:me_gauche_vals}
+
+		groups = get_groups()
+		back_groups = groups.slice(0,3)
+		front_groups = groups.slice(3,6)
+
+		//alert("Front groups: " + front_groups + ". Back groups: " + back_groups)
+
+		gauche_strengths = get_gauche_strengths()
+		eclipsing_strengths = get_eclipsing_strengths()
+
+		//alert("Gauche strengths are " + gauche_strengths)
+		//alert("Eclipsing strengths are " + eclipsing_strengths)
+
+		gauche_strains = 0
+		eclipsing_strains = 0
+		for (var i = 0; i < front_groups.length; i++) {
+
+			target_group = front_groups[i]
+			for (var j = 0; j < back_groups.length; j++) {
+				comp_group = back_groups[j]
+				gauche_strains += gauche_vals[target_group][comp_group] * gauche_strengths[i][j]
+				eclipsing_strains += eclipsing_vals[target_group][comp_group] * eclipsing_strengths[i][j]
+			}
+
+		}
+
+		return [gauche_strains,eclipsing_strains]
 
 	}
 
