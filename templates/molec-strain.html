@@ -60,7 +60,7 @@
       </select>
     </div>
     <div class="col">
-      <select class="form-control", name="bg3">
+      <select class="form-control", name="bg3"">
       	<option>H</option>
       	<option>Me</option>
       </select>
@@ -68,25 +68,41 @@
   </div>
 </div>
 
+<div id="clear_graph">
+	<p></p>
+    <input name="clear_button" 
+           type="button" 
+           value="Clear Graph" 
+           onclick="clear_graph(g)" />
+</div>
+<div id="change_color">
+    <input name="color_button" 
+           type="button" 
+           value="Change Plotting Color" 
+           onclick="alter_master_color()">
+	<p></p>
+</div>
+
 </form>
 
+<div class = "leftcontainer" id="spinchart">
 <script>
-	// set up
+	// set up the interactive plot
 	// note: front/back designations are backwards
-	var w = 800,  h = 500 , r = 75, mult = 2.3, backfrac = 3;
+	var w = 340,  h = 340 , r = 50, mult = 2.3, backfrac = 3;
 	 
-	var svg = d3.select("html").append("svg")
+	var svg = d3.select("#spinchart").append("svg")
 		.attr({width: w, height: h})
 		.on("mousemove", follow_mouse)
 		.on("mouseover", update_groups);
 	
 	// text displays
 	var report = svg.append("text") .attr("id", "report")
-		.attr({x: 80, y: 80})
+		.attr({x: 20, y: 20})
 		.text("Dihedral Angle: 0.00°");
 
 	var strain = svg.append("text") .attr("id", "strain")
-		.attr({x: 80, y: 100})
+		.attr({x: 20, y: 40})
 		.text("Strain: 0 kJ/mol");
 		
 	// groups
@@ -163,6 +179,8 @@
 		strains = calculate_strains()
 		total_strain = strains[0] + strains[1]
 		d3.select("#strain").text("Strain: " + total_strain.toFixed(2) + " kJ/mol");
+
+		add_points(g,[dispangle],[total_strain], master_color)
 	}
 
 	function get_groups() {
@@ -307,7 +325,129 @@
 		}
 
 	}
-
 </script>
+</div>
+
+<div class = "rightcontainer" id = "scatterchart">
+<script>
+	//set up the graph
+	var xdata = [0,360],
+    ydata = [0,35];
+
+	// size and margins for the chart
+	var margin = {top: 20, right: 15, bottom: 60, left: 60}
+	  , width = w - margin.left - margin.right
+	  , height = h - margin.top - margin.bottom;
+
+	// x and y scales, I've used linear here but there are other options
+	// the scales translate data values to pixel values for you
+	var x = d3.scale.linear()
+	          .domain([0,d3.max(xdata)])  // the range of the values to plot
+	          .range([ 0, width ]);        // the pixel range of the x-axis
+
+	var y = d3.scale.linear()
+	          .domain([0, d3.max(ydata)])
+	          .range([ height, 0 ]);
+
+	// the chart object, includes all margins
+	var chart = d3.select('#scatterchart')
+	.append('svg:svg')
+	.attr('width', width + margin.right + margin.left)
+	.attr('height', height + margin.top + margin.bottom)
+	.attr('class', 'chart')
+
+	// the main object where the chart and axis will be drawn
+	var main = chart.append('g')
+	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+	.attr('width', width)
+	.attr('height', height)
+	.attr('class', 'main')   
+
+	// draw the x axis
+	var xAxis = d3.svg.axis()
+	.scale(x)
+	.orient('bottom');
+
+	main.append("text")      // text label for the x axis
+        .attr("x", width/2 )
+        .attr("y", height+35)
+        .style("text-anchor", "middle")
+        .text("Dihedral Angle (degrees)");
+
+  	main.append("text")      // text label for the x axis
+        .attr("x", -30 )
+        .attr("y", 180)
+        .style("text-anchor", "middle")
+        .text("Strain (kJ/mol)")
+        .attr('transform', 'rotate(-90,-30,180)')
+
+	main.append('g')
+	.attr('transform', 'translate(0,' + height + ')')
+	.attr('class', 'main axis date')
+	.call(xAxis);
+
+	// draw the y axis
+	var yAxis = d3.svg.axis()
+	.scale(y)
+	.orient('left');
+
+	main.append('g')
+	.attr('transform', 'translate(0,0)')
+	.attr('class', 'main axis date')
+	.call(yAxis);
+
+	// draw the graph object
+	var g = main.append("svg:g"); 
+
+	/*
+	g.selectAll("scatter-dots")
+	  .data(ydata)  // using the values in the ydata array
+	  .enter().append("svg:circle")  // create a new circle for each value
+	      .attr("cy", function (d) { return y(d); } ) // translate y value to a pixel
+	      .attr("cx", function (d,i) { return x(xdata[i]); } ) // translate x value
+	      .attr("r", 5) // radius of circle
+	      .style("opacity", 0.6); // opacity of circle
+	*/
+
+	function add_points(graph,exes,whys,color) {
+		graph.selectAll("scatter-dots")
+		  .data(whys)  // using the values in the ydata array
+		  .enter().append("svg:circle")  // create a new circle for each value
+		      .attr("cy", function (d) { return y(d); } ) // translate y value to a pixel
+		      .attr("cx", function (d,i) { return x(exes[i]); } ) // translate x value
+		      .attr("r", 3.5) // radius of circle
+		      .style("opacity", 0.5) // opacity of circle
+		      .style('fill', color);
+	}
+
+	function clear_graph(graph) {
+
+		graph.selectAll("circle").remove()
+
+	}
+
+	function randomColor(brightness){
+	  function randomChannel(brightness){
+	    var r = 255-brightness;
+	    var n = 0|((Math.random() * r) + brightness);
+	    var s = n.toString(16);
+	    return (s.length==1) ? '0'+s : s;
+	  }
+	  return '#' + randomChannel(brightness) + randomChannel(brightness) + randomChannel(brightness);
+	}
+
+	function alter_master_color() {
+
+		master_color = randomColor(0)
+
+		var property = document.getElementById('change_color');
+		property.style.backgroundColor = master_color;
+
+	}
+
+	master_color = randomColor(0)
+	document.getElementById("change_color").style.backgroundColor=master_color;
+</script>
+</div>
 
 {% endblock content %}

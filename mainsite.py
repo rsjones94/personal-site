@@ -18,7 +18,7 @@ def pyfluv():
 def ecotrajectory():
     return render_template('ecotrajectory.html', title='ecotrajectory')
 
-@app.route("/molec-strain")
+@app.route("/newman")
 def molec_strain():
     return render_template('molec-strain.html', title='Newman Projection')
 
