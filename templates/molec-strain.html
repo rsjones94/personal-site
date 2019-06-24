@@ -60,7 +60,7 @@
       </select>
     </div>
     <div class="col">
-      <select class="form-control", name="bg3"">
+      <select class="form-control", name="bg3">
       	<option>H</option>
       	<option>Me</option>
       </select>
@@ -181,6 +181,8 @@
 		d3.select("#strain").text("Strain: " + total_strain.toFixed(2) + " kJ/mol");
 
 		add_points(g,[dispangle],[total_strain], master_color)
+
+		mark_point(g,[dispangle],[total_strain])
 	}
 
 	function get_groups() {
@@ -418,6 +420,20 @@
 		      .attr("r", 3.5) // radius of circle
 		      .style("opacity", 0.5) // opacity of circle
 		      .style('fill', color);
+	}
+
+	function mark_point(graph,exes,whys) {
+
+		graph.selectAll("rect").remove()
+
+		graph.selectAll("scatter-dots")
+		  .data(whys)  // using the values in the ydata array
+		  .enter().append("svg:rect")  // create a new circle for each value
+		      .attr("y", function (d) { return y(d)-5; } ) // translate y value to a pixel
+		      .attr("x", function (d,i) { return x(exes[i])-5; } ) // translate x value
+		      .attr("width", 10) // radius of circle
+		      .attr("height", 10)
+		      .style('fill', "black");
 	}
 
 	function clear_graph(graph) {
