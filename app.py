@@ -26,6 +26,10 @@ def molec_strain():
 def geoengine():
     return render_template('geoengine.html', title='KCI Geoengine')
 
+@app.route("/fuzzypeach")
+def fuzzypeach():
+    return render_template('fuzzypeach.html', title='fuzzyPeach')
+
 @app.route("/more-projects")
 def more_projects():
     return render_template('more-projects.html', title='More Projects')
