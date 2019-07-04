@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
 	{% if title %}
-		<title>Sky Jones Development - {{title }}</title>
+		<title>Sky Jones Development - {{title}}</title>
 	{% else %}
 		<title>Sky Jones Development</title>
 	{% endif %}
@@ -30,11 +30,11 @@
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
 	          <a class="nav-item nav-link" href="/">Home</a>
-	          <a class="nav-item nav-link" href="/about">About Me</a>
-	          <a class="nav-item nav-link" href="https://github.com/rsjones94/" target="_blank">Github</a>
+	          <a class="nav-item nav-link" href="/about">About</a>
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
+	          <a class="nav-item nav-link" href="https://github.com/rsjones94/" target="_blank">Github</a>
 	          <a class="nav-item nav-link" href="/contact">Contact</a>
 	        </div>
 	      </div>
@@ -44,20 +44,37 @@
 
 	<main role="main" class="container">
 	  <div class="row">
-	    <div class="col-md-8">
+	    <div class="col-md-9">
 	      {% block content %}{% endblock content%}
 	    </div>
-	    <div class="col-md-4">
+	    <div class="col-md-3">
 	      <div class="content-section">
 	        <h3>Directory</h3>
-	        <p class='text-muted'>Check out some of my projects below.
+	        <p class='text-muted'> Check out what I'm working on below.<!-- can put text here -->
 	          <ul class="list-group">
-	            <a class="list-group-item list-group-item-light nav-link" href="/pyfluv">pyfluv</a>
-	            <a class="list-group-item list-group-item-light nav-link" href="/ecotrajectory">ecotrajectory</a>
-	            <a class="list-group-item list-group-item-light nav-link" href="/newman">Interactive Newman Projection</a>
-	            <a class="list-group-item list-group-item-light nav-link" href="/geoengine">KCI Geoengine</a>
-	            <a class="list-group-item list-group-item-light nav-link" href="/fuzzypeach">fuzzyPeach</a>
-	            <a class="list-group-item list-group-item-light nav-link" href="/more-projects">More</a>
+				<div class="dropdown show list-group-item list-group-item-light nav-link"> <!-- begin dropdown -->
+				  <a class="dropdown-toggle list-group-item-light" href="#" role="button" id="webtooldropdrown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				    Web Tools and Sites
+				  </a>
+				  <div class="dropdown-menu" aria-labelledby="webtooldropdrown">
+			      <li><a class="dropdown-item" href="/newman">Interactive Newman Projection</a></li>
+				  </div>
+				</div> <!-- end dropdown -->
+				<div class="dropdown show list-group-item list-group-item-light nav-link"> <!-- begin dropdown -->
+				  <a class="dropdown-toggle list-group-item-light" href="#" role="button" id="projectdropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				    Programming Projects
+				  </a>
+				  <div class="dropdown-menu" aria-labelledby="projectdropdown">
+			      <li><a class="dropdown-item" href="/pyfluv">pyfluv</a></li>
+			      <li><a class="dropdown-item" href="/ecotrajectory">ecotrajectory</a></li>
+			      <li><a class="dropdown-item" href="/geoengine">KCI Geoengine</a></li>
+			      <li><a class="dropdown-item" href="/fuzzypeach">fuzzyPEACH</a></li>
+			      <li><div class="dropdown-divider"></div></li>
+			      <li><a class="dropdown-item" href="/more-projects">More</a></li>
+				  </div>
+				</div> <!-- end dropdown -->
+				<a class="list-group-item list-group-item-light nav-link" href="/music">Music</a>
+				<a class="list-group-item list-group-item-light nav-link" href="/pet-therapy">Pet Therapy</a>
 	          </ul>
 	        </p>
 	      </div>

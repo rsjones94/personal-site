@@ -1,11 +1,28 @@
 body {
-  background: #fafafa;
+  background: #dedede;
   color: #333333;
   margin-top: 5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: #444444;
+}
+
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* Bottom of button */
+  right: 0;
+  margin-left: -100px; /* More to the left */
+  background: #ffffff;
+}
+
+.caption {
+  color: gray;
+  font-size: 0.9em;
 }
 
 .bg-steel {
@@ -27,7 +44,7 @@ h1, h2, h3, h4, h5, h6 {
 .content-section {
   background: #ffffff;
   padding: 10px 20px;
-  border: 1px solid #dddddd;
+  border: 1px solid #545454;
   border-radius: 3px;
   margin-bottom: 20px;
 }

@@ -34,5 +34,9 @@ def fuzzypeach():
 def more_projects():
     return render_template('more-projects.html', title='More Projects')
 
+@app.route("/pet-therapy")
+def pet_therapy():
+    return render_template('pet-therapy.html', title='Pet Therapy')
+
 if __name__ == '__main__':
     app.run(debug=True)
