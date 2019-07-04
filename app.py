@@ -38,5 +38,10 @@ def more_projects():
 def pet_therapy():
     return render_template('pet-therapy.html', title='Pet Therapy')
 
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html', title='Whoops! 404'), 404
+
 if __name__ == '__main__':
     app.run(debug=True)
