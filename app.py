@@ -1,5 +1,9 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
+
+from forms import ContactForm
+
 app = Flask(__name__)
+app.secret_key = '10doublecross2016DEV'
 
 @app.route("/")
 @app.route("/home")
@@ -37,6 +41,17 @@ def more_projects():
 @app.route("/pet-therapy")
 def pet_therapy():
     return render_template('pet-therapy.html', title='Pet Therapy')
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+  
+  form = ContactForm()
+ 
+  if request.method == 'POST':
+      return 'Form posted.'
+ 
+  elif request.method == 'GET':
+      return render_template('contact.html', form=form)
 
 @app.errorhandler(404)
 def page_not_found(e):

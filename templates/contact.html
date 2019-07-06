@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+
+	<article class="media content-section">
+	  <div class="media-body">
+	    <h2><a class="article-title">Contact</a></h2>
+	    	<p style="text-align: left;">
+			  <form action="{{ url_for('contact') }}" method=post>
+			    {{ form.hidden_tag() }}
+			 
+			    {{ form.name.label }}
+			    {{ form.name }}
+			 
+			    {{ form.email.label }}
+			    {{ form.email }}
+			 
+			    {{ form.subject.label }}
+			    {{ form.subject }}
+			 
+			    {{ form.message.label }}
+			    {{ form.message }}
+			 
+			    {{ form.submit }}
+			  </form>
+	    	</p>
+	  </div>
+	</article>
+
+{% endblock content %}
