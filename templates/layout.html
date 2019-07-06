@@ -23,18 +23,19 @@
 	<header class="site-header">
 	  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
 	    <div class="container">
-	      <a class="navbar-brand mr-4" href="/">Sky Jones Development</a>
+	      <a class="navbar-brand mr-4" href="{{url_for('home')}}">Sky Jones Development</a>
 	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
 	        <span class="navbar-toggler-icon"></span>
 	      </button>
 	      <div class="collapse navbar-collapse" id="navbarToggle">
 	        <div class="navbar-nav mr-auto">
-	          <a class="nav-item nav-link" href="/">Home</a>
-	          <a class="nav-item nav-link" href="/about">About</a>
+	          <a class="nav-item nav-link" href="{{url_for('home')}}">Home</a>
+	          <a class="nav-item nav-link" href="{{url_for('about')}}">About</a>
 	        </div>
 	        <!-- Navbar Right Side -->
 	        <div class="navbar-nav">
 	          <a class="nav-item nav-link" href="https://github.com/rsjones94/" target="_blank">Github</a>
+	          <a class="nav-item nav-link" href="https://www.linkedin.com/in/randallsajones" target="_blank">LinkedIn</a>
 	          <a class="nav-item nav-link" href="/contact">Contact</a>
 	        </div>
 	      </div>
@@ -57,7 +58,7 @@
 				    Web Tools and Sites
 				  </a>
 				  <div class="dropdown-menu" aria-labelledby="webtooldropdrown">
-			      <li><a class="dropdown-item" href="/newman">Interactive Newman Projection</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('molec_strain')}}">Interactive Newman Projection</a></li>
 				  </div>
 				</div> <!-- end dropdown -->
 				<div class="dropdown show list-group-item list-group-item-light nav-link"> <!-- begin dropdown -->
@@ -65,16 +66,16 @@
 				    Programming Projects
 				  </a>
 				  <div class="dropdown-menu" aria-labelledby="projectdropdown">
-			      <li><a class="dropdown-item" href="/pyfluv">pyfluv</a></li>
-			      <li><a class="dropdown-item" href="/ecotrajectory">ecotrajectory</a></li>
-			      <li><a class="dropdown-item" href="/geoengine">KCI Geoengine</a></li>
-			      <li><a class="dropdown-item" href="/fuzzypeach">fuzzyPEACH</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('pyfluv')}}">pyfluv</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('ecotrajectory')}}">ecotrajectory</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('geoengine')}}">KCI Geoengine</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('fuzzypeach')}}">fuzzyPEACH</a></li>
 			      <li><div class="dropdown-divider"></div></li>
-			      <li><a class="dropdown-item" href="/more-projects">More</a></li>
+			      <li><a class="dropdown-item" href="{{url_for('more_projects')}}">More</a></li>
 				  </div>
 				</div> <!-- end dropdown -->
 				<a class="list-group-item list-group-item-light nav-link" href="/music">Music</a>
-				<a class="list-group-item list-group-item-light nav-link" href="/pet-therapy">Pet Therapy</a>
+				<a class="list-group-item list-group-item-light nav-link" href="{{url_for('pet_therapy')}}">Pet Therapy</a>
 	          </ul>
 	        </p>
 	      </div>
