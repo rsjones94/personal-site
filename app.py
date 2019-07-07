@@ -1,9 +1,21 @@
 from flask import Flask, render_template, url_for, request
 
+from flask_mail import Message, Mail
+
 from forms import ContactForm
 
+
 app = Flask(__name__)
+
 app.secret_key = '10doublecross2016DEV'
+
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 465
+app.config["MAIL_USE_SSL"] = True
+app.config["MAIL_USERNAME"] = 'contact@example.com'
+app.config["MAIL_PASSWORD"] = 'your-password'
+ 
+Mail.init_app(app)
 
 @app.route("/")
 @app.route("/home")

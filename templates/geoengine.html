@@ -4,7 +4,18 @@
 	<article class="media content-section">
 	  <div class="media-body">
 	    <h2><a class="article-title">The KCI Geoengine</a></h2>
-	    	<p style="text-align: left;">---</p>
+	    	<p style="text-align: left;">
+	    		If you're unfamiliar with the regulatory framework of stream restoration, it goes something like this in most states: if you destroy or degrade a stream for any reason, you must restore or build an equal length of stream of similar quality in the same-ish watershed. Engineering firms in many states can do these stream restoration projects ahead of time and "bank" the credits to be sold later to private or governmental agencies that need to offset stream degredation. To find potential banking projects, analysts at most firms trawl aerial imagery looking for streams that seem like they might be good candidates for restorative work.
+	    	</p>
+
+	    	<p style="text-align: left;">
+	    		While working at KCI I realized that there must be a better way to find projects than just scrolling through aerial imagery, so I proposed the Geoengine, a web mapping tool that combines multiple layers of GIS data with quantitative predictions of the best locations for high quality stream (and wetland) restoration projects. A good model would not only be able to highlight the best projects to focus on it, it could do it for entire watersheds or states all at once. The project was awarded $27,000 at the beginning of 2018 to develop it, and a year later the web mapping application launched.
+	    	</p>
+
+	    	<p style="text-align: left;">
+	    		I hired Graham Farley to help with the project, and he wrote most of the code that does the predictions. It's a cool mix of machine learning implemented in Python and first principles, but unfortunately it's proprietary so I can't share it here. We wrapped the predictions in an ESRI webapp that the analysts at KCI now use to find potential projects much faster than before.
+	    	</p>
+
 	  </div>
 	</article>
 {% endblock content %}
