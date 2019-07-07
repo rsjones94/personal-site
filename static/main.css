@@ -151,12 +151,28 @@ svg {
 
 /* FORMS */
 
+input#name,
+input#email,
+input#subject {
+
+  width: 400px
+
+}
+
+textarea#message {
+  width: 500px;
+  height: 100px;
+
+}
+
 label {
   font-size: 1.2em;
   font-weight: bold;
   display: block;
   padding: 10px 0;
 }
+
+/*
  
 form input#name,
 form input#email,
@@ -214,3 +230,4 @@ form input#submit:hover{
   background-image: -o-linear-gradient(top, #dbdbdb, #cccccc);
   background-image: linear-gradient(top, #dbdbdb, #cccccc);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#dbdbdb, endColorstr=#cccccc);
 }
+*/
