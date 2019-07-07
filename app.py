@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 app.secret_key = '10doublecross2016DEV'
 
+"""
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
     "MAIL_PORT": 465,
@@ -21,6 +22,7 @@ mail_settings = {
 
 app.config.update(mail_settings)
 mail = Mail(app)
+"""
 
 @app.route("/")
 @app.route("/home")
@@ -64,19 +66,23 @@ def contact():
     form = ContactForm()
     
     if request.method == 'POST':
-        the_body = """
-        From: %s <%s>
-        %s
-        """ % (form.name.data, form.email.data, form.message.data)
-          
-        with app.app_context():
-            msg = Message(subject=form.subject.data+' - (skyjonesdev contact form)',
-                          sender=app.config.get("MAIL_USERNAME"),
-                          recipients=["rsajones94@gmail.com"],
-                          body=the_body)
-            mail.send(msg)
-         
-        return render_template('contact.html', success=True)
+        
+        try:
+            the_body = """
+            From: %s <%s>
+            %s
+            """ % (form.name.data, form.email.data, form.message.data)
+              
+            with app.app_context():
+                msg = Message(subject=form.subject.data+' - (skyjonesdev contact form)',
+                              sender=app.config.get("MAIL_USERNAME"),
+                              recipients=["rsajones94@gmail.com"],
+                              body=the_body)
+                mail.send(msg)
+             
+            return render_template('contact.html', success=True)
+        except:
+            return "Contact forms are down right now. We're working on it!"
  
     elif request.method == 'GET':
         return render_template('contact.html', form=form)
