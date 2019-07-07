@@ -4,25 +4,31 @@
 	<article class="media content-section">
 	  <div class="media-body">
 	    <h2><a class="article-title">Contact</a></h2>
-	    	<p style="text-align: left;">
-			  <form action="{{ url_for('contact') }}" method=post>
-			    {{ form.hidden_tag() }}
-			 
-			    {{ form.name.label }}
-			    {{ form.name }}
-			 
-			    {{ form.email.label }}
-			    {{ form.email }}
-			 
-			    {{ form.subject.label }}
-			    {{ form.subject }}
-			 
-			    {{ form.message.label }}
-			    {{ form.message }}
-			 
-			    {{ form.submit }}
-			  </form>
-	    	</p>
+
+	    	{% if success %}
+    		  <p>Thanks for your message. That anyone is using this form is totally fascinating to me; I'll get back to you soon.</p>
+
+    		{% else %}
+		    	<p style="text-align: left;">
+				  <form action="{{ url_for('contact') }}" method=post>
+				    {{ form.hidden_tag() }}
+				 
+				    {{ form.name.label }}
+				    {{ form.name }}
+				 
+				    {{ form.email.label }}
+				    {{ form.email }}
+				 
+				    {{ form.subject.label }}
+				    {{ form.subject }}
+				 
+				    {{ form.message.label }}
+				    {{ form.message }}
+				 
+				    {{ form.submit }}
+				  </form>
+		    	</p>
+		    {% endif %}
 	  </div>
 	</article>
 

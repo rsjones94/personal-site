@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for, request
+import os
 
+from flask import Flask, render_template, url_for, request
 from flask_mail import Message, Mail
 
 from forms import ContactForm
@@ -9,13 +10,17 @@ app = Flask(__name__)
 
 app.secret_key = '10doublecross2016DEV'
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 465
-app.config["MAIL_USE_SSL"] = True
-app.config["MAIL_USERNAME"] = 'contact@example.com'
-app.config["MAIL_PASSWORD"] = 'your-password'
- 
-Mail.init_app(app)
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": os.environ['EMAIL_USER'],
+    "MAIL_PASSWORD": os.environ['EMAIL_APP_PASSWORD']
+}
+
+app.config.update(mail_settings)
+mail = Mail(app)
 
 @app.route("/")
 @app.route("/home")
@@ -56,14 +61,25 @@ def pet_therapy():
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
-  
-  form = ContactForm()
+    form = ContactForm()
+    
+    if request.method == 'POST':
+        the_body = """
+        From: %s <%s>
+        %s
+        """ % (form.name.data, form.email.data, form.message.data)
+          
+        with app.app_context():
+            msg = Message(subject=form.subject.data+' - (skyjonesdev contact form)',
+                          sender=app.config.get("MAIL_USERNAME"),
+                          recipients=["rsajones94@gmail.com"],
+                          body=the_body)
+            mail.send(msg)
+         
+        return render_template('contact.html', success=True)
  
-  if request.method == 'POST':
-      return 'Form posted.'
- 
-  elif request.method == 'GET':
-      return render_template('contact.html', form=form)
+    elif request.method == 'GET':
+        return render_template('contact.html', form=form)
 
 @app.errorhandler(404)
 def page_not_found(e):
